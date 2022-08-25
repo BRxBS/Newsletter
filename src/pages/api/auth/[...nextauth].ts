@@ -1,12 +1,13 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import { env } from "process";
-
+import { getToken } from "next-auth/jwt";
 import { query } from "faunadb";
 import { fauna } from "../../../services/fauna";
 
 export default NextAuth({
   // Configure one or more authentication providers
+  secret: process.env.AUTH_SECRET,
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID,
