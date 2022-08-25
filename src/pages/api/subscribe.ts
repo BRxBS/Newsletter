@@ -5,17 +5,19 @@ import { query } from "faunadb";
 import { fauna } from "../../services/fauna";
 
 type User = {
-    ref:{
-        id: string;
-    }
-    data:{
-        stripe_customer_id: string;
-    }
-}
+  ref: {
+    id: string;
+  };
+  data: {
+    stripe_customer_id: string;
+  };
+
+};
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if(req.method === 'POST') {
         const session = await getSession({req})
+      
 
         const user = await fauna.query<User>(
             query.Get(
@@ -26,36 +28,37 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             )
         )
 
-        let customerId = user.data.stripe_customer_id
-
+        
+        let customerId = user.data.stripe_customer_id;
+        console.log(user)
+        
         if(!customerId){
 
-            const stripeCustomer =  await stripe.customers.create({
+
+         const stripeCustomer =  await stripe.customers.create({
                 email: session.user.email,
                 //metadata
             })
 
-            await fauna.query(
-                query.Update(
-                    query.Ref(query.Collection('users'), user.ref.id),
-                    {
-                        data:{
-                            stripe_customer_id: stripeCustomer.id
+
+           await fauna.query(
+             query.Update(query.Ref(query.Collection("users"), user.ref.id), {
+               data: {
+                 stripe_customer_id: stripeCustomer.id,
+               },
+             })
+           );
+
+           customerId = stripeCustomer.id
                         }
-                    }
-                )
-            )
-
-            customerId = stripeCustomer.id
-        }
-
+            
 
         const stripeCheackoutSession = await stripe.checkout.sessions.create({
           customer: customerId,
           payment_method_types: ["card"],
           billing_address_collection: "required",
           line_items: [
-            { price: "price_1LaIPiKhhmuslvA1UiMgTJKf", quantity: 1 },
+            { price: "price_1LaIPiKhhmuslvA1UiMgTJKf", quantity: 1 }
           ],
           mode: "subscription",
           allow_promotion_codes: true,
