@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@stripe/stripe-js": "^1.35.0",
+    "@vercel/node": "^2.5.11",
     "axios": "^0.27.2",
     "faunadb": "^4.6.0",
     "next": "12.2.5",
