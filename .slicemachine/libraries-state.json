@@ -1,0 +1,86 @@
+{
+  "slices": {
+    "components": {
+      "post": {
+        "library": "slices",
+        "id": "post",
+        "name": "Post",
+        "description": "Post",
+        "model": {
+          "id": "post",
+          "type": "SharedSlice",
+          "name": "Post",
+          "description": "Post",
+          "variations": [
+            {
+              "id": "default",
+              "name": "Default",
+              "docURL": "...",
+              "version": "sktwi1xtmkfgx8626",
+              "description": "Post",
+              "primary": {
+                "title": {
+                  "type": "StructuredText",
+                  "config": {
+                    "label": "Title",
+                    "placeholder": "This is where it all begins...",
+                    "allowTargetBlank": true,
+                    "single": "heading1"
+                  }
+                },
+                "description": {
+                  "type": "StructuredText",
+                  "config": {
+                    "label": "Description",
+                    "placeholder": "A nice description of your feature",
+                    "allowTargetBlank": true,
+                    "single": "paragraph"
+                  }
+                }
+              },
+              "items": {},
+              "imageUrl": "https://images.prismic.io/slice-machine/621a5ec4-0387-4bc5-9860-2dd46cbc07cd_default_ss.png?auto=compress,format"
+            }
+          ]
+        },
+        "mocks": {
+          "default": {
+            "variation": "default",
+            "version": "sktwi1xtmkfgx8626",
+            "items": [
+              {}
+            ],
+            "primary": {
+              "title": [
+                {
+                  "type": "heading1",
+                  "text": "Shelter",
+                  "spans": []
+                }
+              ],
+              "description": [
+                {
+                  "type": "paragraph",
+                  "text": "Aute commodo sunt aliqua laboris ut ipsum duis et. Non excepteur esse qui culpa qui magna fugiat aliqua laborum ullamco ipsum ad. Id consectetur nulla aliquip dolor culpa ullamco tempor irure minim in.",
+                  "spans": []
+                }
+              ]
+            },
+            "slice_type": "post"
+          }
+        },
+        "meta": {
+          "fileName": "index",
+          "extension": "js"
+        },
+        "screenshotPaths": {
+          "default": {
+            "path": "C:\\Users\\Administrator\\OneDrive\\Documentos\\1.PROJETOS DESENVOLVIDOS NO CURSO IGNITE\\newsLetter\\news\\.slicemachine\\assets\\slices\\Post\\default\\preview.png",
+            "width": 800,
+            "height": 77
+          }
+        }
+      }
+    }
+  }
+}
