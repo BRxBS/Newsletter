@@ -5,7 +5,7 @@ import React from "react";
 
 import styles from "./styles.module.scss";
 
-export default function Poost() {
+export default function Post() {
   return (
     <>
       {/* <Head>
@@ -36,12 +36,14 @@ export default function Poost() {
     </>
   );
 }
-
+// it doesn't work
 
 import { SliceZone } from "@prismicio/react";
 
 import { createClient } from "../../../prismicio";
 import { components } from "../../../slices";
+import sm from "../../../sm.json"
+import * as prismic from '@prismicio/client'
 
 
 export const Page = ({ page }) => {
@@ -50,10 +52,11 @@ export const Page = ({ page }) => {
 
 
 
-export async function getStaticProps({ previewData }) {
-  const client = createClient({ previewData });
 
-  const page = await client.getSingle("homepage");
+export async function getStaticProps({ previewData }) {
+ const client = createClient({ previewData });
+
+  const page = await client.getSingle("Post");
 
   return {
     props: {
