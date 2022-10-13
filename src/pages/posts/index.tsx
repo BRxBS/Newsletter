@@ -1,66 +1,63 @@
-import { GetStaticProps } from "next";
-import { Head } from "next/document"; 
+import Head from "next/head";
 import React from "react";
-
+import { gql } from "@apollo/client";
+import { client } from "../../services/apollo";
+import Link from "next/link";
 
 import styles from "./styles.module.scss";
 
-export default function Post() {
+export async function getStaticProps() {
+  const { data: post } = await client.query({
+    query: gql`
+      query MyQuery {
+        posts {
+          slug
+          title
+          createdAt
+          content
+          id
+        }
+      }
+    `,
+  });
+  console.log(post);
+  const { posts } = post;
+  
+  return {
+    props: {
+      posts,
+    },
+  };
+}
+
+export default function Post({ posts }) {
+  console.log("dentro", posts);
+
   return (
     <>
-      {/* <Head>
+      <Head>
         <title>Posts | Newsletter</title>
-      </Head> */}
+      </Head>
 
       <main className={styles.container}>
         <div className={styles.posts}>
-          <a href="#">
-            <time>12 de março de 2021</time>
-            <strong>creating a monoreppo</strong>
-            <p>In this guide, you will learn how...</p>
-          </a>
-
-          <a href="#">
-            <time>12 de março de 2021</time>
-            <strong>creating a monoreppo</strong>
-            <p>In this guide, you will learn how...</p>
-          </a>
-
-          <a href="#">
-            <time>12 de março de 2021</time>
-            <strong>creating a monoreppo</strong>
-            <p>In this guide, you will learn how...</p>
-          </a>
+          {posts.map((outro) => (
+            <Link href={`/posts/${outro.slug}`}>
+            <a key={outro.id} >
+              {new Date(outro.createdAt).toLocaleDateString(
+                'pt-BR', {
+                  day: '2-digit',
+                  month:'long',
+                  year:'numeric'
+                }
+                )}
+              <strong>{outro.title}</strong>
+              <p>{outro.content}</p>
+            </a>
+                </Link>
+          ))}
         </div>
       </main>
     </>
   );
-}
-// it doesn't work
-
-import { SliceZone } from "@prismicio/react";
-
-import { createClient } from "../../../prismicio";
-import { components } from "../../../slices";
-import sm from "../../../sm.json"
-import * as prismic from '@prismicio/client'
-
-
-export const Page = ({ page }) => {
-  return <SliceZone slices={page.data.slices} components={components} />;
-};
-
-
-
-
-export async function getStaticProps({ previewData }) {
- const client = createClient({ previewData });
-
-  const page = await client.getSingle("Post");
-
-  return {
-    props: {
-      page,
-    },
-  };
 }
