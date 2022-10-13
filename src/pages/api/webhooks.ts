@@ -31,6 +31,7 @@ export default async function (req: VercelRequest, res: VercelResponse) {
   if (req.method === "POST") {
     const buf = await buffer(req);
     const secret = req.headers["stripe-signatures"];
+    console.log('const secret', secret)
 
     let event: Stripe.Event;
 
@@ -46,6 +47,7 @@ export default async function (req: VercelRequest, res: VercelResponse) {
     }
 
     const { type } = event;
+    console.log('type', type)
 
     if (relevantEvents.has(type)) {
       try {
@@ -67,12 +69,13 @@ export default async function (req: VercelRequest, res: VercelResponse) {
           case "checkout.session.completed":
             const checkoutSession = event.data
               .object as Stripe.Checkout.Session;
-
-            await saveSubscription(
-              checkoutSession.subscription.toString(),
-              checkoutSession.customer.toString(),
-              true
-            );
+              
+              await saveSubscription(
+                checkoutSession.subscription.toString(),
+                checkoutSession.customer.toString(),
+                true
+                );
+                console.log("checkoutsession", checkoutSession);
             break;
           default:
             throw new Error("unhandled event");
