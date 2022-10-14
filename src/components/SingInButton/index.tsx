@@ -1,5 +1,5 @@
 import React from "react";
-import { FaGithub } from 'react-icons/fa'
+import {FaGoogle} from 'react-icons/fa'
 import { FiX } from "react-icons/fi";
 import { signIn, signOut, useSession } from "next-auth/react";
 
@@ -14,7 +14,7 @@ export function SingInButton(){
       type="button" 
       className={styles.signIn}
       onClick={() => signOut()}>
-        <FaGithub color="#04d361" />
+        <FaGoogle color="#04d361" />
         {session.user.name}
         <FiX color='737380' className={styles.closeIcon}/>
       </button>
@@ -23,8 +23,8 @@ export function SingInButton(){
       type="button" 
       className={styles.signIn}
       onClick={()=> signIn('github')}>
-        <FaGithub color="#eba417" />
-        Sing in with Github
+        <FaGoogle color="#eba417" />
+        Sing in with Google
       </button>
     );
 }
