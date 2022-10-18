@@ -20,7 +20,7 @@ export async function getStaticProps() {
       }
     `,
   });
-  console.log(post);
+  // console.log(post);
   const { posts } = post;
   
   return {
@@ -31,7 +31,7 @@ export async function getStaticProps() {
 }
 
 export default function Post({ posts }) {
-  console.log("dentro", posts);
+  // console.log("dentro", posts);
 
   return (
     <>
