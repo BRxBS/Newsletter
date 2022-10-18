@@ -17,6 +17,7 @@ async function buffer(readable: Readable) {
   for await (const chunk of readable) {
     chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
   }
+
   return Buffer.concat(chunks);
 }
 
@@ -30,7 +31,7 @@ const relevantEvents = new Set([
 export default async function (req: VercelRequest, res: VercelResponse) {
   if (req.method === "POST") {
     const buf = await buffer(req);
-    const secret = req.headers["stripe-signatures"];
+    const secret = req.headers["stripe-signatures"] as string;
     console.log('const secret', secret)
 
     let event: Stripe.Event;
@@ -42,12 +43,13 @@ export default async function (req: VercelRequest, res: VercelResponse) {
         process.env.STRIPE_WEBHOOK_SECRET
       );
     } catch (err) {
-      console.log(err);
+      console.log('erro no try, cacth',err);
       return res.status(400).send(`Webhook error: ${err.message}`);
     }
+    console.log('oi') 
 
     const { type } = event;
-    console.log('type', type)
+    console.log(' webhook type', type)
 
     if (relevantEvents.has(type)) {
       try {
