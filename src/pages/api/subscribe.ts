@@ -31,7 +31,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         
         let customerId = user.data.stripe_customer_id;
-        console.log('user stripe',user)
+        // console.log('user stripe',user)
         
         if(!customerId){
 
@@ -40,7 +40,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 email: session.user.email,
                 //metadata
             })
-            console.log("stripeCustomer", stripeCustomer);
+            // console.log("stripeCustomer", stripeCustomer);
 
 
            await fauna.query(
@@ -67,7 +67,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           success_url: process.env.STRIPE_SUCCESS_URL,
           cancel_url: process.env.STRIPE_CANCEL_URL,
         });
-        console.log("stripeCheackoutSession", stripeCheackoutSession);
+        // console.log("stripeCheackoutSession", stripeCheackoutSession);
         return res.status(200).json({ sessionId: stripeCheackoutSession.id});
     } else {
         res.setHeader('Allow', 'POST')
