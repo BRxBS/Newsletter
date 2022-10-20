@@ -42,7 +42,7 @@ export default function Post({ posts }) {
       <main className={styles.container}>
         <div className={styles.posts}>
           {posts.map((outro) => (
-            <Link href={`/posts/${outro.slug}`}>
+            <Link key={outro.id} href={`/posts/${outro.slug}`}>
             <a key={outro.id} >
               {new Date(outro.createdAt).toLocaleDateString(
                 'pt-BR', {
