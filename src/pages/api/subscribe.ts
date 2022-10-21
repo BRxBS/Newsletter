@@ -52,6 +52,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
            );
 
            customerId = stripeCustomer.id
+           console.log('subscribe - customerID', customerId)
+           console.log('subscribe -  user.ref.id', user.ref.id)
           }
             
 
