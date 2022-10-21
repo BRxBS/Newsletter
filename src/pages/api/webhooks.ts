@@ -55,7 +55,7 @@
                             console.log('chatch')
                             return;
                           }
-                          
+                         
                     
                         } else {
                           res.setHeader("Allow", "POST");
@@ -77,7 +77,9 @@
                     if (relevantEvents.has(type)) {
                       // console.log('evento recebido', event)
                       try {
+                          console.log('evento recebido no try')
                         switch (type) {
+                          
                           // case "customer.subscription.created":
                           // // case "customer.subscription.updated":
                           // // case "customer.subscription.deleted": 
@@ -91,18 +93,24 @@
                           //               console.log("subscription", subscription);
 
                           //   break;
-
-
                           case "checkout.session.completed":
-                            const checkoutSession = event.data
-                              .object as Stripe.Checkout.Session;
+                          
+                            const checkoutSession = event.data.object as Stripe.Checkout.Session;
+                            const vari = 'vindo do webhook'
+                            console.log("checkoutsession- subscription", checkoutSession.subscription);
+                            console.log("checkoutsession- customer", checkoutSession.customer);
+                            
                           
                               await saveSubscription(
+                            
                                 checkoutSession.subscription.toString(),
                                 checkoutSession.customer.toString(),
-                                // true
+                                // vari
+
+                                true
                                 );
-                                // console.log("checkoutsession", checkoutSession);
+                                console.log("fez o case");
+                                console.log("checkoutsession", checkoutSession);
                             break;
                           default:
                             throw new Error("unhandled event");
