@@ -1,9 +1,12 @@
-
-                    import Stripe from "stripe";
-                    import { stripe } from "../../services/stripe";
-                    import type { VercelRequest, VercelResponse } from "@vercel/node";
-                    import type { Readable } from "node:stream";
-                    import { saveSubscription } from "./_lib/manegeSubscription";
+  import Stripe from "stripe";
+  import { stripe } from "../../services/stripe";
+  import { fauna } from "../../services/fauna";
+  import { query } from "faunadb";
+  import { NextApiRequest, NextApiResponse } from "next";
+import { getSession, useSession } from "next-auth/react";
+  import type { VercelRequest, VercelResponse } from "@vercel/node";
+  import type { Readable } from "node:stream";
+  import { saveSubscription } from "./_lib/manegeSubscription";
 
                     async function buffer(readable: Readable) {
                     const chunks = [];
@@ -29,7 +32,63 @@
                       "customer.subscription.deleted",
                     ]);
 
-                    export default async function (req: VercelRequest, res: VercelResponse, event: Stripe.Event) {
+                  async function saveSub( subscriptionId: string, customerId: string, createAction: boolean){
+                  
+                    
+                      console.log("subscriptionId- subscription", subscriptionId);
+                      console.log("customerId- subscription", customerId);
+
+                         console.log('dentro de query')
+
+                         const userRef = await fauna.query(
+                           query.Select(
+                               'ref',
+                               query.Get(
+                                   query.Match(
+                                       query.Index('user_by_stripe_customer_id'),
+                                       customerId
+                                   )
+                               )
+                           )
+                       )
+                       console.log('userRef', userRef)
+
+                   
+                       const subscription =  await stripe.subscriptions.retrieve(subscriptionId)
+                       console.log('subscriptions.retrive', subscription)
+                   
+                       const subscriptionData = {
+                           id: subscription.id,
+                           userId: userRef,
+                           status: subscription.status,
+                           price_id: subscription.items.data[0].price.id 
+                       }
+                       if (createAction) {
+                         await fauna.query(
+                           query.Create(query.Collection("subscriptions"), {
+                             data: subscriptionData,
+                           })
+                         );
+                     } else{
+                             await fauna.query(
+                               query.Replace(
+                                 query.Select(
+                                   "ref",
+                                   query.Get(
+                                     query.Match(
+                                         query.Index("subscription_by_id"),
+                                         subscriptionId,
+                                      )
+                                   )
+                                 ),
+                                 {data: subscriptionData}
+                               )
+                             );
+                     }
+                       
+                     }
+
+export default async function (req: VercelRequest, res: VercelResponse, event: Stripe.Event) {
 
                         if (req.method === "POST") {
                           const buf = await buffer(req);
@@ -96,21 +155,29 @@
                           case "checkout.session.completed":
                           
                             const checkoutSession = event.data.object as Stripe.Checkout.Session;
-                            const vari = 'vindo do webhook'
+                            // const vari = 'vindo do webhook'
                             console.log("checkoutsession- subscription", checkoutSession.subscription);
                             console.log("checkoutsession- customer", checkoutSession.customer);
+
+                            await saveSub(
+                                            checkoutSession.subscription.toString(),
+                                            checkoutSession.customer.toString(),
+                                            true
+                                            );
+                          
                             
                           
-                              await saveSubscription(
+                              // await saveSubscription(
                             
-                                checkoutSession.subscription.toString(),
-                                checkoutSession.customer.toString(),
-                                // vari
+                              //   checkoutSession.subscription.toString(),
+                              //   checkoutSession.customer.toString(),
+                              //   // vari
 
-                                true
-                                );
-                                console.log("fez o case");
-                                console.log("checkoutsession", checkoutSession);
+                              //   true
+                              //   );
+                              //   console.log("fez o case");
+                              //   console.log("checkoutsession", checkoutSession);
+
                             break;
                           default:
                             throw new Error("unhandled event");
