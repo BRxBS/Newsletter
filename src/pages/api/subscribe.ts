@@ -28,10 +28,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 )
             )
         )
+        console.log('user fauna',user)
 
         
         let customerId = user.data.stripe_customer_id;
-        // console.log('user stripe',user)
+        
         
         if(!customerId){
 
