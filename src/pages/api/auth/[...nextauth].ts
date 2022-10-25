@@ -13,6 +13,9 @@ import { FaunaAdapter } from "@next-auth/fauna-adapter"
    });
 
 export default NextAuth({
+  session: {
+    strategy: "jwt",
+  },
   // Configure one or more authentication providers
   secret: process.env.NEXTAUTH_SECRET,
   // adapter: FaunaAdapter(client),
@@ -27,9 +30,31 @@ export default NextAuth({
   // adapter: FaunaAdapter(client),
 
   callbacks: {
+//   jwt callback is only called when token is created
+// async jwt({ token, user }) {
+//   if (user) {
+//     console.log('nextAuth - token - jwt', token)
+//     token = user;
+//     // token = user;
+//     token.user=user
+//   }
+//   console.log('nextAuth - token - jwt - 2', token)
+//   return Promise.resolve(token);
+// },
+
+// session: async ({ session, token }) => {
+//   // session callback is called whenever a session for that particular user is checked
+//  // in above function we created token.user=user
+//  console.log('nextAuth - session', session)
+//  console.log('nextAuth - token', token)
+
+//   return Promise.resolve(session)
+// },
 
 
-    async signIn({ user, account, profile, credentials }) {
+     
+
+    async signIn({ user}) {
       const { email } = user;
       try {
         await fauna.query(
