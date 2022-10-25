@@ -24,6 +24,8 @@ export async function  saveSubscription(
 //  console.log('customerId', customerId)
                                                                                                           
 console.log('depois session')
+// const session = await getSession()
+//       console.log('session-webhook', session)
 
 const user = await fauna.query<User>(
         query.Get(
@@ -33,6 +35,10 @@ const user = await fauna.query<User>(
             )
         )
     )
+    console.log('manegeSub - user fauna', user)
+
+
+
     const userRef =  await fauna.query<User>(
         query.Select(
             query.Ref(query.Collection("users"), user.ref.id),
