@@ -106,6 +106,7 @@ export default async function (req: VercelRequest, res: VercelResponse, event: S
               console.log("checkoutsession- subscription", checkoutSession.subscription);
               console.log("checkoutsession- customer", checkoutSession.customer);
 
+              // this is as testing function to try to connect with fauna to save the subscription
               // await function saveSub(req: NextApiRequest, subscriptionId: string, customerId: string, createAction: boolean){
                 
       

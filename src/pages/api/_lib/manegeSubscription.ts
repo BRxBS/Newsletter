@@ -19,13 +19,19 @@ export async function  saveSubscription(
     customerId: String,
     createAction = true,
  ){
-//     console.log(vari)
+// the subscriptionId and customerId gets here.
+
+
 //   console.log('subscriptionId', subscriptionId)
 //  console.log('customerId', customerId)
                                                                                                           
 console.log('depois session')
 // const session = await getSession()
-//       console.log('session-webhook', session)
+// console.log('session-webhook', session)
+
+// can't connect with fauna (like on the subscribe.ts ) to save the subscription.
+
+
 
 const user = await fauna.query<User>(
         query.Get(
